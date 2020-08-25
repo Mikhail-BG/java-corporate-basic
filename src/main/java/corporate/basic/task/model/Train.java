@@ -2,27 +2,33 @@ package corporate.basic.task.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+public class Train extends BaseModel {
+    private static final Random RANDOM = new Random();
+    private static final String LABEL = "TRAIN-";
 
-public class Train
-{
+    private final String guid;
     private final List<Carriage> carriages;
 
-    public Train()
-    {
+    public Train() {
+        this.guid = LABEL + RANDOM.nextInt(100);
         this.carriages = new ArrayList<>();
     }
 
-    public List<Carriage> getCarriages()
-    {
+    public String getGuid() {
+        return guid;
+    }
+
+    public List<Carriage> getCarriages() {
         return carriages;
     }
 
-    @Override
-    public String toString()
-    {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
+    public void addCarriage(Carriage carriage) {
+        this.carriages.add(carriage);
+    }
+
+    public void removeCarriage(Carriage carriage){
+        this.carriages.remove(carriage);
     }
 }

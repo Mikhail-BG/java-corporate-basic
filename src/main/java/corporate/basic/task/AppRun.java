@@ -1,13 +1,11 @@
 package corporate.basic.task;
 
-import corporate.basic.task.manager.TrainManager;
 import corporate.basic.task.model.Cargo;
 import corporate.basic.task.model.Carriage;
+import corporate.basic.task.model.Train;
 
-public class AppRun
-{
-    public static void main(String[] args)
-    {
+public class AppRun {
+    public static void main(String[] args) {
         Cargo cargo1 = new Cargo("Cargo A", 100, 10);
         Cargo cargo2 = new Cargo("Cargo B", 200, 20);
         Cargo cargo3 = new Cargo("Cargo C", 300, 30);
@@ -16,25 +14,50 @@ public class AppRun
         Carriage carriage1 = new Carriage(4000);
         Carriage carriage2 = new Carriage(5000);
         Carriage carriage3 = new Carriage(5000);
-        Carriage carriage4 = new Carriage(8000);
+        Carriage carriage4 = new Carriage(4000);
 
-        TrainManager trainManager = new TrainManager()
-                .addCarriage(carriage1)
-                .addCarriage(carriage2)
-                .addCarriage(carriage3);
+        Train train = new Train();
+        train.addCarriage(carriage1);
+        train.addCarriage(carriage2);
+        train.addCarriage(carriage3);
+        train.addCarriage(carriage4);
 
-        System.out.println(trainManager.addCargo(cargo1));
-        System.out.println(trainManager.getTrain());
+        carriage1.addCargo(cargo1);
+        carriage1.addCargo(cargo2);
+        carriage2.addCargo(cargo1);
+        carriage2.addCargo(cargo2);
+        carriage2.addCargo(cargo3);
+        carriage3.addCargo(cargo3);
+        carriage4.addCargo(cargo3);
+        carriage4.addCargo(cargo4);
 
-        System.out.println(trainManager.addCargo(cargo2));
-        System.out.println(trainManager.getTrain());
+        System.out.println(train);
 
-        System.out.println(trainManager.addCargo(cargo3));
-        System.out.println(trainManager.getTrain());
+        System.out.println(carriage1);
+        System.out.println(carriage2);
+        System.out.println(carriage3);
+        System.out.println(carriage4);
 
-        trainManager.addCarriage(carriage4);
+        System.out.println(cargo1);
+        System.out.println(cargo2);
+        System.out.println(cargo3);
+        System.out.println(cargo4);
 
-        System.out.println(trainManager.addCargo(cargo4));
-        System.out.println(trainManager.getTrain());
+        carriage1.removeCargo(cargo1);
+        carriage1.removeCargo(cargo2);
+
+        train.removeCarriage(carriage3);
+
+        System.out.println(train);
+
+        System.out.println(carriage1);
+        System.out.println(carriage2);
+        System.out.println(carriage3);
+        System.out.println(carriage4);
+
+        System.out.println(cargo1);
+        System.out.println(cargo2);
+        System.out.println(cargo3);
+        System.out.println(cargo4);
     }
 }
