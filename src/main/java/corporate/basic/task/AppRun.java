@@ -11,10 +11,10 @@ public class AppRun {
         Cargo cargo3 = new Cargo("Cargo C", 300, 30);
         Cargo cargo4 = new Cargo("Cargo D", 100, 50);
 
-        Carriage carriage1 = new Carriage(4000);
-        Carriage carriage2 = new Carriage(5000);
-        Carriage carriage3 = new Carriage(5000);
-        Carriage carriage4 = new Carriage(4000);
+        Carriage carriage1 = new Carriage(1);
+        Carriage carriage2 = new Carriage(2);
+        Carriage carriage3 = new Carriage(3);
+        Carriage carriage4 = new Carriage(4);
 
         Train train = new Train();
         train.addCarriage(carriage1);
@@ -22,42 +22,18 @@ public class AppRun {
         train.addCarriage(carriage3);
         train.addCarriage(carriage4);
 
-        carriage1.addCargo(cargo1);
-        carriage1.addCargo(cargo2);
-        carriage2.addCargo(cargo1);
-        carriage2.addCargo(cargo2);
-        carriage2.addCargo(cargo3);
-        carriage3.addCargo(cargo3);
-        carriage4.addCargo(cargo3);
-        carriage4.addCargo(cargo4);
+        carriage1.addCargos(cargo1, cargo2, cargo3, cargo4);
+        carriage2.addCargos(cargo1, cargo2, cargo3, cargo4);
+        carriage3.addCargos(cargo1, cargo2, cargo3, cargo4);
+        carriage4.addCargos(cargo1, cargo2, cargo3, cargo4);
 
         System.out.println(train);
 
-        System.out.println(carriage1);
-        System.out.println(carriage2);
-        System.out.println(carriage3);
-        System.out.println(carriage4);
-
-        System.out.println(cargo1);
-        System.out.println(cargo2);
-        System.out.println(cargo3);
-        System.out.println(cargo4);
-
-        carriage1.removeCargo(cargo1);
         carriage1.removeCargo(cargo2);
+        carriage3.removeCargo(cargo1);
 
-        train.removeCarriage(carriage3);
+        train.removeCarriage(carriage4);
 
         System.out.println(train);
-
-        System.out.println(carriage1);
-        System.out.println(carriage2);
-        System.out.println(carriage3);
-        System.out.println(carriage4);
-
-        System.out.println(cargo1);
-        System.out.println(cargo2);
-        System.out.println(cargo3);
-        System.out.println(cargo4);
     }
 }

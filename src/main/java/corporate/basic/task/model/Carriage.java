@@ -1,77 +1,76 @@
 package corporate.basic.task.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Carriage extends BaseModel {
     private static final String LABEL = "CARRIAGE-0";
     private static int carriageCounter = 1;
 
     private final String id;
-    private final Map<String, Integer> cargoDescriptions;
-    private int capacity;
+    private final Cargo[] cargos;
+
+    private int capacityIndex;
 
     public Carriage(int capacity) {
         this.id = LABEL + carriageCounter++;
-        this.capacity = capacity;
-        this.cargoDescriptions = new HashMap<>();
+        this.cargos = new Cargo[capacity];
+        this.capacityIndex = 0;
     }
 
     public String getId() {
         return id;
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
+    public boolean addCargos(Cargo... cargos){
+        boolean isLoaded = false;
+        for (Cargo cargo : cargos){
+            isLoaded = addCargo(cargo);
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public Map<String, Integer> getCargoDescriptions() {
-        return cargoDescriptions;
-    }
-
-    public void addCargo(Cargo cargo) {
-        int cargoCounter = 0;
-
-        // Cargo could be loaded if there is a free capacity and cargo is not loaded fully
-        while (canHandle(cargo) && cargo.getQuantity() > 0) {
-            loadCargo(cargo, ++cargoCounter);
-        }
-    }
-
-    public void removeCargo(Cargo cargo) {
-        String cargoDescription = cargo.getDescription();
-
-        if (cargoDescriptions.get(cargo.getDescription()) == null) {
-            return;
+            if (!isLoaded){
+                break;
+            }
         }
 
-        while (cargoDescriptions.get(cargoDescription) > 0) {
-            unloadCargo(cargo);
+        return isLoaded;
+    }
+
+    public boolean addCargo(Cargo cargo) {
+        boolean isLoaded = false;
+
+        if (capacityIndex < cargos.length) {
+            loadCargo(cargo);
+            isLoaded = true;
         }
 
-        if (cargoDescriptions.get(cargoDescription) == 0){
-            cargoDescriptions.remove(cargoDescription);
+        return isLoaded;
+    }
+
+    public boolean removeCargo(Cargo cargo) {
+        boolean isRemoved = false;
+
+        int cargoIndex = 0;
+        for (Cargo loadedCargo : cargos) {
+            if (loadedCargo == cargo) {
+                unloadCargo(cargoIndex);
+                isRemoved = true;
+                break;
+            }
+            cargoIndex += 1;
         }
+
+        return isRemoved;
     }
 
-    private boolean canHandle(Cargo cargo) {
-        return capacity >= cargo.getWeight();
+    private void loadCargo(Cargo cargo) {
+        cargos[capacityIndex] = cargo;
+        capacityIndex += 1;
     }
 
-    private void loadCargo(Cargo cargo, int cargoCounter) {
-        cargoDescriptions.put(cargo.getDescription(), cargoCounter);
-        capacity -= cargo.getWeight();
-        cargo.setQuantity(cargo.getQuantity() - 1);
-    }
-
-    private void unloadCargo(Cargo cargo) {
-        String cargoDescription = cargo.getDescription();
-        cargoDescriptions.put(cargoDescription, cargoDescriptions.get(cargoDescription) - 1);
-        capacity += cargo.getWeight();
-        cargo.setQuantity(cargo.getQuantity() + 1);
+    private void unloadCargo(int cargoIndex) {
+        // Remove cargo from its position
+        // Empty the last capacity cell
+        if (cargoIndex < capacityIndex) {
+            cargos[cargoIndex] = cargos[cargos.length - 1];
+        }
+        cargos[cargos.length - 1] = null;
+        capacityIndex -= 1;
     }
 }

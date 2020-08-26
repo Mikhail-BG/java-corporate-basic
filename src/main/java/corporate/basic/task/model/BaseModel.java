@@ -20,15 +20,12 @@ public class BaseModel {
             setContentStart("");
             setContentEnd("\n");
 
-            setArrayStart("{");
-            setArrayEnd("}");
-
             setFieldSeparator(", ");
             setFieldNameValueSeparator(" = ");
 
             setArraySeparator("");
-            setArrayStart("\n[\n");
-            setArrayEnd("]\n");
+            setArrayStart("[\n");
+            setArrayEnd("]");
         }
     }
 }

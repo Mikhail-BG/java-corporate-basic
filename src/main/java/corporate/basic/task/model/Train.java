@@ -28,7 +28,7 @@ public class Train extends BaseModel {
         this.carriages.add(carriage);
     }
 
-    public void removeCarriage(Carriage carriage){
+    public void removeCarriage(Carriage carriage) {
         this.carriages.remove(carriage);
     }
 }
