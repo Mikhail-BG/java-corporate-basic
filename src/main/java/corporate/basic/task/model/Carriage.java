@@ -16,7 +16,7 @@ public abstract class Carriage extends BaseModel {
     }
 
     public String getInfo(){
-        return id;
+        return "Carriage: " + id;
     }
 
     public enum CarriageType{

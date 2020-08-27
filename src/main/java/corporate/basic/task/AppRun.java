@@ -14,7 +14,6 @@ public class AppRun {
         Passenger passenger3 = new Passenger("CHANNING", "TATUM");
         Passenger passenger4 = new Passenger("JOHNNY", "DEPP");
 
-
         Locomotive locomotive1 = new Locomotive(5);
         Locomotive locomotive2 = new Locomotive(4);
 

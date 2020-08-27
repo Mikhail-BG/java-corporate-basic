@@ -3,7 +3,7 @@ package corporate.basic.task.model;
 import java.util.Arrays;
 
 public class PassengerCarriage extends Carriage {
-    private Passenger[] passengers;
+    private final Passenger[] passengers;
 
     public PassengerCarriage(Passenger... passengers) {
         super(CarriageType.PASSENGER);
