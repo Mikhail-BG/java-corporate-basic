@@ -1,8 +1,6 @@
 package corporate.basic.task;
 
-import corporate.basic.task.model.Cargo;
-import corporate.basic.task.model.Carriage;
-import corporate.basic.task.model.Train;
+import corporate.basic.task.model.*;
 
 public class AppRun {
     public static void main(String[] args) {
@@ -11,29 +9,47 @@ public class AppRun {
         Cargo cargo3 = new Cargo("Cargo C", 300, 30);
         Cargo cargo4 = new Cargo("Cargo D", 100, 50);
 
-        Carriage carriage1 = new Carriage(1);
-        Carriage carriage2 = new Carriage(2);
-        Carriage carriage3 = new Carriage(3);
-        Carriage carriage4 = new Carriage(4);
+        Passenger passenger1 = new Passenger("CHRIS", "EVANS");
+        Passenger passenger2 = new Passenger("JENNIFER", "LAWRENCE");
+        Passenger passenger3 = new Passenger("CHANNING", "TATUM");
+        Passenger passenger4 = new Passenger("JOHNNY", "DEPP");
 
-        Train train = new Train();
-        train.addCarriage(carriage1);
-        train.addCarriage(carriage2);
-        train.addCarriage(carriage3);
-        train.addCarriage(carriage4);
 
-        carriage1.addCargos(cargo1, cargo2, cargo3, cargo4);
-        carriage2.addCargos(cargo1, cargo2, cargo3, cargo4);
-        carriage3.addCargos(cargo1, cargo2, cargo3, cargo4);
-        carriage4.addCargos(cargo1, cargo2, cargo3, cargo4);
+        Locomotive locomotive1 = new Locomotive(5);
+        Locomotive locomotive2 = new Locomotive(4);
 
-        System.out.println(train);
+        FreightCarriage freightCarriage1 = new FreightCarriage(1);
+        FreightCarriage freightCarriage2 = new FreightCarriage(2);
+        FreightCarriage freightCarriage3 = new FreightCarriage(3);
+        FreightCarriage freightCarriage4 = new FreightCarriage(4);
 
-        carriage1.removeCargo(cargo2);
-        carriage3.removeCargo(cargo1);
+        PassengerCarriage passengerCarriage1 = new PassengerCarriage(passenger1, passenger2);
+        PassengerCarriage passengerCarriage2 = new PassengerCarriage(passenger3, passenger4);
 
-        train.removeCarriage(carriage4);
+        Train train = new Train(locomotive1);
+        train.addAnotherCarriage(freightCarriage1);
+        train.addAnotherCarriage(freightCarriage2);
+        train.addAnotherCarriage(freightCarriage3);
+        train.addAnotherCarriage(passengerCarriage1);
+        train.addAnotherCarriage(passengerCarriage2);
 
-        System.out.println(train);
+        freightCarriage1.addCargos(cargo1, cargo2, cargo3, cargo4);
+        freightCarriage2.addCargos(cargo1, cargo2, cargo3, cargo4);
+        freightCarriage3.addCargos(cargo1, cargo2, cargo3, cargo4);
+        freightCarriage4.addCargos(cargo1, cargo2, cargo3, cargo4);
+
+        System.out.println(train.prettyPrint());
+
+        freightCarriage1.removeCargo(cargo2);
+        freightCarriage3.removeCargo(cargo1);
+        train.replaceLocomotive(locomotive2);
+
+        System.out.println(train.prettyPrint());
+
+        train.removeCarriage(freightCarriage4);
+        train.removeCarriage(passengerCarriage2);
+        train.replaceLocomotive(locomotive2);
+
+        System.out.println(train.prettyPrint());
     }
 }
