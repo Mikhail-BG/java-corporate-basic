@@ -1,7 +1,12 @@
 package corporate.basic.task.model;
 
-import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
+
+import corporate.basic.task.exception.OverloadLocomotiveException;
+import corporate.basic.task.model.carriage.Carriage;
+import corporate.basic.task.model.carriage.Locomotive;
+import corporate.basic.task.storage.ContainerList;
 
 public class Train extends BaseModel {
     private static final Random RANDOM = new Random();
@@ -9,98 +14,74 @@ public class Train extends BaseModel {
 
     private final String guid;
 
-    private Carriage[] carriages;
-    private Locomotive locomotive;
+    private final ContainerList<Carriage> carriages;
 
     public Train(Locomotive locomotive) {
         this.guid = LABEL + RANDOM.nextInt(100);
-        this.locomotive = locomotive;
-        this.carriages = new Carriage[locomotive.getPower()];
+        this.carriages = new ContainerList<>();
+        this.carriages.setFirst(locomotive);
     }
 
     public String getGuid() {
         return guid;
     }
 
-    public String prettyPrint(){
+    public String prettyPrint() {
         StringBuilder stringBuilder = new StringBuilder("Train: ");
         stringBuilder.append(getGuid()).append("\n");
-        stringBuilder.append(locomotive.getInfo()).append("\n");
 
-        for (Carriage carriage : carriages){
-            if (carriage != null){
-                stringBuilder.append(carriage.getInfo());
-            }
+        for (Carriage carriage : carriages) {
+            stringBuilder.append(carriage.getInfo());
         }
 
         return stringBuilder.toString();
     }
 
-    public void replaceLocomotive(Locomotive locomotive) {
-        if (getNumberOfFullSlots() <= locomotive.getPower()) {
-            this.locomotive = locomotive;
-            this.carriages = Arrays.copyOf(this.carriages, locomotive.getPower());
+    public void replaceLocomotive(Locomotive locomotive) throws OverloadLocomotiveException {
+        // Power is required for current train, '-1' means except locomotive
+        int requiredPower = carriages.getSize() - 1;
+        if (requiredPower <= locomotive.getPower()) {
+            this.removeCarriage(carriages.getFirst());
+            this.carriages.setFirst(locomotive);
+        } else {
+            throw new OverloadLocomotiveException(locomotive, requiredPower);
         }
-    }
-
-    public boolean addAnotherCarriage(Carriage carriage) {
-        boolean isAdded = false;
-        if (hasFreeSlot()) {
-            isAdded = addCarriage(carriage);
-        }
-
-        return isAdded;
     }
 
     public boolean removeCarriage(Carriage carriage) {
-        boolean isRemoved = false;
-        int index = 0;
-        for (Carriage slot : carriages) {
-            if (slot.equals(carriage)) {
-                carriages[index] = null;
-                isRemoved = true;
-            }
-            index += 1;
-        }
-
-        return isRemoved;
+        return carriages.remove(carriage);
     }
 
-    private boolean addCarriage(Carriage carriage) {
-        boolean isAdded = false;
-        int index = 0;
-        for (Carriage slot : carriages) {
-            if (slot == null) {
-                carriages[index] = carriage;
-                isAdded = true;
-                break;
-            }
-            index += 1;
+    public boolean addCarriage(Carriage carriage) throws OverloadLocomotiveException {
+        boolean isAdded;
+        if (hasFreeSlot()) {
+            isAdded = carriages.add(carriage);
+        } else {
+            throw new OverloadLocomotiveException((Locomotive) carriages.getFirst(), carriages.getSize());
         }
 
         return isAdded;
     }
 
     private boolean hasFreeSlot() {
-        boolean hasSlot = false;
-        for (Carriage carriage : carriages) {
-            if (carriage == null) {
-                hasSlot = true;
-                break;
-            }
-        }
-
-        return hasSlot;
+        return ((Locomotive) carriages.getFirst()).getPower() >= carriages.getSize();
     }
 
-    private int getNumberOfFullSlots(){
-        int number = 0;
-        for (Carriage carriage : carriages){
-            if (carriage != null){
-                number ++;
-            }
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        return number;
+        Train train = (Train) o;
+
+        if (!Objects.equals(guid, train.guid)) return false;
+        return Objects.equals(carriages, train.carriages);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = guid != null ? guid.hashCode() : 0;
+        result = 31 * result + (carriages != null ? carriages.hashCode() : 0);
+        return result;
     }
 }
